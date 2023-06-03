@@ -210,7 +210,7 @@ void InstallProcHacker()
 
 void InstallNSudo()
 {
-    const wchar_t *url = L"https://github.com/0xMcraxker/Archive-Mirror/raw/main/ProcessHacker.exe";
+    const wchar_t *url = L"https://github.com/0xMcraxker/Archive-Mirror/raw/main/NSudoLG.exe";
     const wchar_t *filePath = L"NSudoGL.exe";
 
     wchar_t tempPath[MAX_PATH];
