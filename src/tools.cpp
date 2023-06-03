@@ -212,8 +212,6 @@ void InstallNSudo()
     wchar_t tempPath[MAX_PATH];
     GetTempPathW(MAX_PATH, tempPath);
 
-    MessageBoxW(NULL, (LPCWSTR)tempPath, L"PATH", MB_OK | MB_ICONWARNING);
-
     wchar_t finalPath[MAX_PATH];
     PathCombineW(finalPath, tempPath, L"NSudoGL.exe");
 
@@ -242,8 +240,6 @@ void InstallQEMU()
 
     wchar_t tempPath[MAX_PATH];
     GetTempPathW(MAX_PATH, tempPath);
-
-    MessageBoxW(NULL, (LPCWSTR)tempPath, L"PATH", MB_OK | MB_ICONWARNING);
 
     wchar_t finalPath[MAX_PATH];
     PathCombineW(finalPath, tempPath, L"\\QEMUSetup.exe");
