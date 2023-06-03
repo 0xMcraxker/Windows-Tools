@@ -5,7 +5,7 @@
 # Compiler settings - Can be customized.
 CC = x86_64-w64-mingw32-gcc
 CXXFLAGS = -std=c++11 -Wall
-LDFLAGS = -lurlmon -lshlwapi -Wunknown-pragmas -Wreturn-type -mwindows -Wl,--subsystem,windows
+LDFLAGS = -lurlmon -lshlwapi -Wreturn-type -Wunknown-pragmas -mwindows -Wl,--subsystem,windows
 
 # Makefile settings - Can be customized.
 APPNAME = windows-tools

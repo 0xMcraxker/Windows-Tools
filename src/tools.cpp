@@ -90,23 +90,29 @@ bool IsRegistryEditorEnabled()
     LSTATUS status;
     HKEY hKey;
 
+    // Open the key for reading system policies
     status = RegOpenKeyEx(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", 0, KEY_QUERY_VALUE, &hKey);
     if (status != ERROR_SUCCESS)
     {
+        // Error opening the key
         return false;
     }
 
+    // Check if the value exists and its data
     DWORD value = 0;
     DWORD dataSize = sizeof(DWORD);
     status = RegQueryValueEx(hKey, "DisableRegistryTools", NULL, NULL, (LPBYTE)&value, &dataSize);
     if (status != ERROR_SUCCESS)
     {
+        // The value doesn't exist or couldn't be read
         RegCloseKey(hKey);
         return false;
     }
 
+    // Close the registry key
     RegCloseKey(hKey);
 
+    // If the value is 0, the Registry Editor is enabled; if it's 1, the Registry Editor is disabled
     return (value == 0);
 }
 
@@ -115,29 +121,37 @@ bool ToggleRegistryEditor()
     LSTATUS status;
     HKEY hKey;
 
+    // Open the key for modifying system policies
     status = RegOpenKeyEx(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", 0, KEY_SET_VALUE, &hKey);
     if (status != ERROR_SUCCESS)
     {
+        // Error opening the key
         return false;
     }
 
+    // Check the current state
     bool enabled = IsRegistryEditorEnabled();
 
+    // Set the opposite value
     DWORD value = (enabled) ? 1 : 0;
     status = RegSetValueEx(hKey, "DisableRegistryTools", 0, REG_DWORD, (const BYTE *)&value, sizeof(DWORD));
     if (status != ERROR_SUCCESS)
     {
+        // Error setting the value
         RegCloseKey(hKey);
         return false;
     }
 
+    // Notify the system about the policy change
     DWORD_PTR result;
     if (!SendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, 0, (LPARAM) "Policy", SMTO_NORMAL, 5000, &result))
     {
+        // Error notifying the system
         RegCloseKey(hKey);
         return false;
     }
 
+    // Close the registry key
     RegCloseKey(hKey);
 
     return true;
@@ -165,13 +179,13 @@ void TurnRegistryEditor()
 void InstallProcHacker()
 {
     const wchar_t *url = L"https://github.com/0xMcraxker/Archive-Mirror/raw/main/ProcessHacker.exe";
-    const wchar_t *filePath = L"proccesshacker.exe";
 
     wchar_t tempPath[MAX_PATH];
     GetTempPathW(MAX_PATH, tempPath);
 
+
     wchar_t finalPath[MAX_PATH];
-    PathCombineW(finalPath, tempPath, filePath);
+    PathCombineW(finalPath, tempPath, L"proccesshacker.exe");
 
     MessageBoxW(NULL, L"Installing Process Hacker", L"Windows Tools Installer", MB_OK | MB_ICONWARNING);
     HRESULT hr = URLDownloadToFileW(NULL, url, finalPath, 0, NULL);
@@ -194,12 +208,14 @@ void InstallProcHacker()
 void InstallNSudo()
 {
     const wchar_t *url = L"https://github.com/0xMcraxker/Archive-Mirror/raw/main/NSudoLG.exe";
-    const wchar_t *filePath = L"NSudoGL.exe";
 
     wchar_t tempPath[MAX_PATH];
-    DWORD pathLen = GetTempPathW(MAX_PATH, tempPath);
+    GetTempPathW(MAX_PATH, tempPath);
+
+    MessageBoxW(NULL, (LPCWSTR)tempPath, L"PATH", MB_OK | MB_ICONWARNING);
 
     wchar_t finalPath[MAX_PATH];
+    PathCombineW(finalPath, tempPath, L"NSudoGL.exe");
 
     MessageBoxW(NULL, L"Installing NSudo", L"Windows Tools Installer", MB_OK | MB_ICONWARNING);
 
@@ -223,13 +239,14 @@ void InstallNSudo()
 void InstallQEMU()
 {
     const wchar_t *url = L"https://qemu.weilnetz.de/w64/qemu-w64-setup-20230531.exe";
-    const wchar_t *filePath = L"\\QEMUSetup.exe";
 
     wchar_t tempPath[MAX_PATH];
     GetTempPathW(MAX_PATH, tempPath);
 
+    MessageBoxW(NULL, (LPCWSTR)tempPath, L"PATH", MB_OK | MB_ICONWARNING);
+
     wchar_t finalPath[MAX_PATH];
-    PathCombineW(finalPath, tempPath, filePath);
+    PathCombineW(finalPath, tempPath, L"\\QEMUSetup.exe");
 
     MessageBoxW(NULL, L"Installing QEMU", L"Windows Tools Installer", MB_OK | MB_ICONWARNING);
 
